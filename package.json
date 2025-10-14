@@ -1,21 +1,24 @@
 {
-  "name": "ariadna",
+  "name": "@proyecto-de-graduacion-02-2025-uca/ariadna",
   "version": "0.1.0",
   "description": "Ariadna: ICPC coach/assistant package",
-  "type": "module",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "default": "./dist/index.js"
-    }
-  },
+  "main": "./dist/index.js",
+  "repository": { "type": "git", "url": "git+https://github.com/proyecto-de-graduacion-02-2025-uca/Ariadna.git" },
+  "publishConfig": { "registry": "https://npm.pkg.github.com/" },
+  "types": "./dist/index.d.ts",
+  "files": ["dist", "README.md", "LICENSE"],
   "scripts": {
     "build": "tsc -p .",
-    "lint": "eslint .",
-    "test": "vitest"
+    "prepublishOnly": "npm run build"
   },
+  "exports": {
+    ".": {
+      "require": "./dist/index.js",
+      "default": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "engines": { "node": ">=16" },
   "dependencies": {
     "zod": "^3.25.76"
   },
