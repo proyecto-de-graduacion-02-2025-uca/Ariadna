@@ -1,0 +1,51 @@
+{
+  "id": "two-sum",
+  "title": "Two Sum Problem",
+  "source": "LeetCode",
+  "version": "1.0.0",
+  "statement": "Dado un arreglo de enteros y un objetivo, devuelve los índices de los dos números que suman el objetivo.",
+  
+  "io": {
+    "style": "stdin-stdout",
+    "inputSpec": "La primera línea contiene N. La segunda línea contiene N enteros. La tercera línea contiene el objetivo.",
+    "outputSpec": "Imprime los índices i y j separados por espacio."
+  },
+
+  "limits": {
+    "time": 2000,
+    "memory": 256,
+    "output": 1024
+  },
+
+  "allowedLanguages": ["cpp17", "python3"],
+
+  "dataset": {
+    "samples": [
+      {
+        "id": "sample1",
+        "in": "4\n2 7 11 15\n9",
+        "out": "0 1",
+        "explanation": "2 + 7 = 9"
+      }
+    ],
+    "tests": [
+      {
+        "id": "test1",
+        "in": "5\n3 2 4 8 9\n6",
+        "out": "1 2"
+      },
+      {
+        "id": "test2",
+        "in": "3\n1 5 3\n4",
+        "out": "0 2"
+      }
+    ]
+  },
+
+  "checker": {
+    "type": "standard"
+  },
+
+  "tags": ["array", "hashmap"],
+  "difficulty": "easy"
+}
