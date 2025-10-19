@@ -1,0 +1,20 @@
+# Imagen base
+FROM ubuntu:22.04
+
+# Evita que el sistema pida confirmaciones durante instalaciones
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Actualiza e instala g++
+RUN apt-get update && \
+    apt-get install -y g++ build-essential && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+# Crea un directorio de trabajo
+WORKDIR /app
+
+# Copia los archivos fuente al contenedor
+COPY . /app
+
+# Comando por defecto
+CMD ["g++", "--version"]
