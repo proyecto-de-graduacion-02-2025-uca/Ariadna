@@ -7,7 +7,7 @@ const request = {
 
     int main() {
       cout << "Hola desde docker!" << endl;
-      return 0
+      return 0;
     }
   `,
   flags: ['-O2', '-std=gnu++17', '-pipe'],

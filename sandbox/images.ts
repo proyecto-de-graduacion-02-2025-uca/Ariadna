@@ -1,1 +1,0 @@
-export const imageTag = 'gcc:13-bookworm';

@@ -2,8 +2,15 @@ import { validateFlags } from './policy.flags';
 import { prepareWorkdir } from './workdir';
 import { runDockerCompiler } from './docker';
 import { CompileRequest, CompileResult } from './types';
-import { imageTag } from './images';
+import { dockerConfig } from './configs';
 
+/**
+ * Función principal para compilar código C++.
+ * 
+ * Toma el código fuente y flags, valida las flags, prepara un directorio de trabajo
+ * temporal, ejecuta la compilación dentro de un contenedor Docker efimero y devuelve
+ * el resultado de la compilacion con informacion de exito o error.
+ */
 export async function compileCpp(request: CompileRequest): Promise<CompileResult> {
   const { sourceCode, flags, sessionId } = request;
 
@@ -12,12 +19,12 @@ export async function compileCpp(request: CompileRequest): Promise<CompileResult
       ok: false,
       kind: 'CE',
       stderr: 'Invalid compiler flags',
-      imageTag,
+      imageTag: dockerConfig.image,
       sessionId
     };
   }
 
-  const workdir = prepareWorkdir(sessionId, sourceCode);
+  const workdir = prepareWorkdir(sourceCode);
   const start = Date.now();
   const result = await runDockerCompiler(workdir, flags, sessionId);
   const compileMs = Date.now() - start;
@@ -27,16 +34,16 @@ export async function compileCpp(request: CompileRequest): Promise<CompileResult
       ok: true,
       binaryPath: result.binaryPath ?? "",
       compileMs,
-      imageTag,
+      imageTag: dockerConfig.image,
       sessionId
     };
   } else {
     return {
       ok: false,
-      kind: 'CE',
-      stderr: result.stderr ?? "",
+      kind: result.kind,
+      stderr: result.stderr ?? "Unknown error",
       exitCode: result.exitCode,
-      imageTag,
+      imageTag: dockerConfig.image,
       sessionId
     };
   }

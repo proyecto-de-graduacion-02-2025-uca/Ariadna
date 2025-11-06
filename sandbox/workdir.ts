@@ -1,6 +1,7 @@
 import { mkdirSync, writeFileSync } from "fs";
 import os from "os";
 import path from "path";
+import {workdirConfigs} from './configs';
 
 /**
  * Prepara un directorio de trabajo temporal para compilar el código fuente.
@@ -10,20 +11,15 @@ import path from "path";
  * - Escribe el archivo "Main.cpp" con el código fuente recibido.
  * - Devuelve la ruta completa del directorio creado.
  */
-export function prepareWorkdir(sessionId: string, sourceCode: string): string {
-  // 📁 Directorio base del sistema (por ejemplo: /tmp o C:\Users\<user>\AppData\Local\Temp)
-  const baseTmp = os.tmpdir();
+export function prepareWorkdir(sourceCode: string): string {
+  const baseTmp = os.tmpdir(); // carpeta temporal
 
-  // 📂 Carpeta única por sesión
-  const workdir = path.join(baseTmp, "ariadna", sessionId);
+  const workdir = path.join(baseTmp, workdirConfigs.folder);
 
-  // ✅ Crea todas las carpetas intermedias si no existen
   mkdirSync(workdir, { recursive: true });
 
-  // 📝 Escribe el archivo fuente principal
-  const mainFile = path.join(workdir, "Main.cpp");
+  const mainFile = path.join(workdir, workdirConfigs.fileName);
   writeFileSync(mainFile, sourceCode, "utf8");
 
-  // 🔁 Devuelve la ruta creada para usarla en Docker
   return workdir;
 }

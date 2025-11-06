@@ -1,2 +1,0 @@
-# Imagen base fija para reproducibilidad
-FROM gcc:13-bookworm
