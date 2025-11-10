@@ -62,7 +62,6 @@ export function runDockerCompiler(
   });
   const primaryMs = Date.now() - tPrimary0;
 
-  // Timeouts / ENOMEM (host)
   if (primary.error) {
     const err = primary.error as NodeJS.ErrnoException;
     if (err.code === 'ETIMEDOUT') {
@@ -73,7 +72,6 @@ export function runDockerCompiler(
     }
   }
 
-  // Infra docker (daemon / image / permisos)
   if (primary.status !== 0 && primary.stderr) {
     const msg = primary.stderr.toString();
     if (/pull access denied|not found|cannot connect to the Docker daemon|The system cannot find the path/i.test(msg)) {
@@ -88,7 +86,6 @@ export function runDockerCompiler(
     }
   }
 
-  // Si falla el estático, intentamos dinámico
   if (primary.status !== 0) {
     if (process.env.ARIADNA_DEBUG) {
       console.log('[Ariadna][compile] primary failed (', primaryMs, 'ms ), trying fallback…');
@@ -123,7 +120,6 @@ export function runDockerCompiler(
     };
   }
 
-  // Éxito por primary
   return {
     ok: true,
     workdir,

@@ -1,12 +1,11 @@
 import { checkEntryAndCompile } from '../index';
 
 async function main() {
-  // Problem válido según tu schema
   const problem = {
     id: 'hello-world',
     title: 'Hello World',
     source: 'internal',
-    version: "1.0.0", // <- numérico (antes '1.0' daba Invalid)
+    version: "1.0.0", 
     statement: 'Minimal problem for compile-only e2e test.',
     io: {
       style: 'stdin-stdout',
@@ -22,7 +21,6 @@ async function main() {
     },
   };
 
-  // Caso 1: Compila OK
   const submissionOk = {
     language: 'cpp17',
     source: `
@@ -35,7 +33,6 @@ async function main() {
     `,
   };
 
-  // Caso 2: CE intencional (falta ;)
   const submissionCe = {
     language: 'cpp17',
     source: `

@@ -1,4 +1,3 @@
-// src/pipeline/compile-entry.ts
 import { validateEntry } from '../entry/index';
 import { compileCpp } from '../sandbox/compiler';
 import { sanitizeFlags } from '../sandbox/policy.flags';
@@ -26,13 +25,11 @@ export type CompileFromEntryInput = {
 export async function compileFromEntry(
   input: CompileFromEntryInput
 ): Promise<CompileResult | EntryErr> {
-  // 1) Validación (Zod)
   const res = validateEntry(input);
   if (!res.ok) return res;
 
   const { submission, sessionId } = res.value;
 
-  // 2) Lenguaje soportado (solo C++)
   const lang = normalizeLanguage((submission as any).language);
   if (lang === 'unsupported') {
     return {
@@ -46,7 +43,6 @@ export async function compileFromEntry(
     };
   }
 
-  // 3) Código fuente
   const source = extractSource(submission);
   if (!source) {
     return {
@@ -55,7 +51,6 @@ export async function compileFromEntry(
     };
   }
 
-  // 4) Flags del compilador (whitelist)
   const defaultFlags = ['-std=gnu++17', '-O2', '-pipe'];
   const { allowed, invalid } = sanitizeFlags(defaultFlags);
   if (invalid.length > 0) {
@@ -67,7 +62,6 @@ export async function compileFromEntry(
     };
   }
 
-  // 5) Compilar (contrato listo para el judge)
   return await compileCpp({
     sessionId,
     source,
@@ -78,7 +72,6 @@ export async function compileFromEntry(
 export async function checkEntryAndCompile(input: CompileFromEntryInput): Promise<boolean> {
   const result = await compileFromEntry(input);
 
-  // A) Error de validación (EntryErr)
   if ('issues' in result) {
     console.error('[Ariadna] INVALID ENTRY:');
     for (const i of result.issues) {
@@ -87,7 +80,6 @@ export async function checkEntryAndCompile(input: CompileFromEntryInput): Promis
     return false;
   }
 
-  // B) Resultado del compilador (CompileResult)
   if (result.ok) {
     console.log(`[Ariadna] COMPILE OK • session=${result.sessionId} • ms=${result.compileMs}`);
     console.log(
