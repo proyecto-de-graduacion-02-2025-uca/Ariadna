@@ -1,0 +1,35 @@
+{
+  "id": "sum-n",
+  "title": "Sumar N enteros",
+  "source": "UCA",
+  "version": "1.0.0",
+  "statement": "Lee N y luego N enteros; imprime la suma total.",
+  "io": {
+    "style": "stdin-stdout",
+    "inputSpec": "Primera línea: N (1<=N<=1e5). Segunda línea: N enteros (|ai|<=1e9).",
+    "outputSpec": "Una línea: la suma total como entero."
+  },
+  "limits": {
+    "timeMs": 1000,
+    "memoryMB": 256,
+    "procCount": 1,
+    "noNetwork": true
+  },
+  "dataset": {
+    "samples": [
+      {
+        "in": "3\n1 2 3\n",
+        "out": "6\n"
+      }
+    ],
+    "tests": [
+      {
+        "in": "1\n5\n",
+        "out": "5\n"
+      }
+    ]
+  },
+  "checker": {
+    "type": "standard"
+  }
+}
