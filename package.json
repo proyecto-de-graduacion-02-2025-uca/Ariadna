@@ -18,7 +18,8 @@
   ],
   "scripts": {
     "build": "tsc -p .",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "npm run build",
+    "dev:e2e-full": "npm run build && node dist/dev/e2e-full.js"
   },
   "exports": {
     ".": {
