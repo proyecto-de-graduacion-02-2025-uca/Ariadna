@@ -37,17 +37,10 @@ export async function callModel(
     prompt: string,
     options: CallModelOptions = {}
 ): Promise<AiResponse> {
-    const apiKey =
-        options.apiKey ?? process.env[API_KEY_ENV];
-
-    const model =
-        options.model ?? process.env[MODEL_ENV];
-
-    const baseUrl =
-        options.baseUrl ?? process.env[BASE_URL_ENV] ?? DEFAULT_BASE_URL;
-
-    const timeoutMs =
-        options.timeoutMs ?? DEFAULT_TIMEOUT_MS;
+    const apiKey = options.apiKey ?? process.env[API_KEY_ENV];
+    const model = options.model ?? process.env[MODEL_ENV];
+    const baseUrl = options.baseUrl ?? process.env[BASE_URL_ENV] ?? DEFAULT_BASE_URL;
+    const timeoutMs = options.timeoutMs ?? DEFAULT_TIMEOUT_MS;
 
     if (!apiKey) {
         const message = `Missing AI API key. Set ${API_KEY_ENV} or provide options.apiKey.`;
@@ -111,24 +104,6 @@ export async function callModel(
         });
 
         clearTimeout(timeout);
-
-        if (!res.ok) {
-            const text = await res.text().catch(() => undefined);
-            const parsed = text ? safeParseJson(text) : undefined;
-            const message = `AI provider error: HTTP ${res.status}`;
-
-            devLog(message, parsed ?? text);
-
-            return {
-                ok: false,
-                error: {
-                    type: 'api',
-                    message,
-                    details: parsed ?? text,
-                    statusCode: res.status,
-                },
-            };
-        }
 
         if (!res.ok) {
             const text = await res.text().catch(() => undefined);
@@ -216,7 +191,7 @@ export async function callModel(
         return {
             ok: false,
             error: {
-                type: 'network',
+                type: 'unknown',
                 message,
                 details:
                     err instanceof Error
