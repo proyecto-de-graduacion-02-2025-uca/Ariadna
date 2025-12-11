@@ -4,12 +4,16 @@ import type { RefineContext } from "./types";
 /**
  * buildRefinePrompt
  * -----------------
- * Produce un pedido de refinación de código basado en:
- * - feedback previo del coach,
- * - veredicto y evidencias reales,
- * - constraints del problema.
+ * Construye un prompt para pedir al modelo una versión refinada del código del usuario,
+ * corrigiendo errores detectados mediante el veredicto, stderr y los ejemplos fallidos.
  *
- * NO implementa refine-k — solo genera un único pedido de refinación.
+ * El objetivo es:
+ *  - Mantener la estructura original del código.
+ *  - Modificar solo lo necesario.
+ *  - No inventar nuevos casos de prueba.
+ *  - Asegurar que la solución respete límites de tiempo/memoria.
+ *
+ * Este prompt debe devolver **solo código**, sin explicaciones.
  */
 export function buildRefinePrompt(ctx: RefineContext): string {
   const {
@@ -27,44 +31,41 @@ export function buildRefinePrompt(ctx: RefineContext): string {
   } = ctx;
 
   return `
-You are an LLM specializing in improving competitive programming code.
+Eres un asistente encargado de **refinar código de programación competitiva**.
 
-## Problem Summary
+## Resumen del problema
 ${problemStatement}
 
-## Examples
+## Ejemplos relevantes (I/O)
 ${examples}
 
-## Last Verdict
-${verdict}
-
+## Información del último envío
+Veredicto: ${verdict}
 ${stderr ? `stderr:\n${stderr}\n` : ""}
-${failingTestInput ? `Failing input:\n${failingTestInput}\n` : ""}
-${expectedOutput ? `Expected:\n${expectedOutput}\n` : ""}
-${userOutput ? `User output:\n${userOutput}\n` : ""}
+${failingTestInput ? `Entrada fallida:\n${failingTestInput}\n` : ""}
+${expectedOutput ? `Salida esperada:\n${expectedOutput}\n` : ""}
+${userOutput ? `Salida del usuario:\n${userOutput}\n` : ""}
 
-## Feedback From Coach
+## Retroalimentación previa del coach
 ${previousFeedback}
 
-## User Code (to refine)
+## Código del usuario (para refinar)
 \`\`\`
 ${userCode}
 \`\`\`
 
-## Refinement Rules (FOLLOW STRICTLY)
-1. Modify the user's code **minimally** — only what is necessary to fix correctness.
-2. Preserve structure, variable names, and overall approach unless they fundamentally cannot work.
-3. Do NOT rewrite everything from scratch.
-4. Base corrections ONLY on:
-   - stderr
-   - failing input
-   - expected vs actual output
-   - constraints (time: ${timeLimitMs} ms, memory: ${memoryLimitMB} MB)
-5. Do NOT invent new test cases.
-6. Do NOT include explanations — output **only the final refined code**.
-7. Ensure the refined version respects time/memory constraints.
+## Reglas estrictas para refinar el código
+1. Mantén la estructura original del usuario.
+2. Modifica solamente lo necesario para corregir el error.
+3. No inventes casos de prueba nuevos.
+4. No agregues comentarios ni explicaciones: **solo devuelve el código final corregido**.
+5. Respeta estrictamente los límites:
+   - Tiempo: ${timeLimitMs} ms
+   - Memoria: ${memoryLimitMB} MB
+6. No resuelvas el problema desde cero; corrige el enfoque actual.
 
-## OUTPUT
-Return ONLY the corrected code:
+## Salida esperada
+Devuelve únicamente el código refinado, sin texto adicional.
 `;
 }
+

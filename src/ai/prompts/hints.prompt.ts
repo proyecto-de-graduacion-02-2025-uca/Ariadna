@@ -4,13 +4,15 @@ import type { HintsContext } from "./types";
 /**
  * buildHintsPrompt
  * ----------------
- * Genera 3 pistas graduadas:
+ * Construye un prompt para generar **pistas graduales** (3 niveles)
+ * sin revelar la solución completa ni escribir código.
  *
- *  Hint 1: Conceptual — mínima ayuda
- *  Hint 2: Direccional — señala aspectos del enfoque correcto
- *  Hint 3: Técnica — guía clara SIN revelar solución ni pseudo-código
+ * Las pistas deben ayudar al usuario a avanzar progresivamente:
+ *  - Pista 1: Conceptual (muy general, mínima ayuda)
+ *  - Pista 2: Direccional (en qué debería fijarse)
+ *  - Pista 3: Técnica (orientación clara sin resolver)
  *
- * Diseñado para evitar que el modelo dé respuestas completas.
+ * No debe generarse código ni pseudocódigo.
  */
 export function buildHintsPrompt(ctx: HintsContext): string {
   const {
@@ -25,34 +27,49 @@ export function buildHintsPrompt(ctx: HintsContext): string {
   } = ctx;
 
   return `
-You are an ICPC-level tutoring assistant. Your task is to produce **gradual hints**,
-NOT the solution.
+Eres un asistente especializado en dar pistas para problemas de programación competitiva.
+Tu objetivo es guiar al usuario SIN revelar la solución completa ni escribir código.
 
-## Problem Summary
+## Resumen del problema
 ${problemStatement}
 
-## Examples
+## Ejemplos relevantes (I/O)
 ${examples}
 
-## Submission Status
-Verdict: ${verdict}
-${failingTestInput ? `Failing input:\n${failingTestInput}` : ""}
-${expectedOutput ? `Expected:\n${expectedOutput}` : ""}
-${userOutput ? `Got:\n${userOutput}` : ""}
+## Estado del último envío
+Veredicto: ${verdict}
+${failingTestInput ? `Entrada que falló:\n${failingTestInput}` : ""}
+${expectedOutput ? `\nSalida esperada:\n${expectedOutput}` : ""}
+${userOutput ? `\nSalida del usuario:\n${userOutput}` : ""}
 
-Time limit: ${timeLimitMs} ms  
-Memory limit: ${memoryLimitMB} MB
+Límite de tiempo: ${timeLimitMs} ms  
+Límite de memoria: ${memoryLimitMB} MB
 
-## Hinting Rules (IMPORTANT)
-- Provide **exactly 3 hints**, each more detailed than the previous.
-- Do NOT give code or pseudo-code.
-- Do NOT reveal the algorithm directly.
-- Always respect constraints (time and memory).
-- Focus on conceptual reasoning and key observations.
+## Instrucciones de generación de pistas
+Debes producir **exactamente 3 pistas**, cada una más reveladora que la anterior:
 
-## Output Format
-Hint 1: ...
-Hint 2: ...
-Hint 3: ...
+1. **Pista 1 (muy ligera):**  
+   Menciona un concepto general, un patrón o una observación del problema.  
+   No nombres algoritmos concretos.
+
+2. **Pista 2 (intermedia):**  
+   Orienta sobre qué parte del razonamiento puede estar fallando el usuario  
+   o qué estructura/comportamiento debería analizar.
+
+3. **Pista 3 (fuerte pero sin solución):**  
+   Indica la idea técnica que debería considerar, pero **sin describir el algoritmo completo**  
+   ni dar pasos exactos.
+
+Reglas rígidas:
+- NO dar código.
+- NO dar pseudocódigo.
+- NO resolver explícitamente el problema.
+- NO mencionar directamente una solución final.
+
+## Formato de salida
+Pista 1: ...
+Pista 2: ...
+Pista 3: ...
 `;
 }
+
