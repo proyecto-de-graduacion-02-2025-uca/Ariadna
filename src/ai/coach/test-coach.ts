@@ -11,7 +11,7 @@ async function main() {
         failingTestInput: "none",
     };
 
-    const response = runCoachExplain(context);
+    const response = await runCoachExplain(context);
 
     console.log("*/************************************/*")
     console.log(response);
