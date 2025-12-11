@@ -1,5 +1,5 @@
 // src/ai/prompts/hints.prompt.ts
-import type { HintsContext } from "../types";
+import type { HintsContext } from "./types";
 
 /**
  * buildHintsPrompt

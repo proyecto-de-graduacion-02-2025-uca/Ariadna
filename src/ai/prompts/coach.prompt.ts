@@ -1,5 +1,5 @@
 // src/ai/prompts/coach.prompt.ts
-import type { CoachContext } from "../types";
+import type { CoachContext } from "./types";
 
 /**
  * buildCoachPrompt
