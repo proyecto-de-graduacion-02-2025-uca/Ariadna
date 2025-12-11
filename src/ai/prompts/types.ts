@@ -34,8 +34,8 @@ export interface BasePromptContext {
   verdict: string;
 
   /** Límites computacionales del problema. */
-  timeLimitMs: number;
-  memoryLimitMB: number;
+  timeLimitMs?: number;
+  memoryLimitMB?: number;
 
   /** Información opcional de debugging. */
   stderr?: string;
@@ -73,7 +73,7 @@ export interface CoachContext extends BasePromptContext {
  * Utilizado por el generador de pistas graduales.
  * No requiere código ni feedback previo.
  */
-export interface HintsContext extends BasePromptContext {}
+export interface HintsContext extends BasePromptContext { }
 
 /* -------------------------------------------------------------------------- */
 /*  Contexto especializado para REFINE                                        */

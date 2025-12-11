@@ -15,18 +15,18 @@ import type { HintsContext } from "./types";
  * No debe generarse código ni pseudocódigo.
  */
 export function buildHintsPrompt(ctx: HintsContext): string {
-  const {
-    problemStatement,
-    examples,
-    verdict,
-    timeLimitMs,
-    memoryLimitMB,
-    failingTestInput,
-    expectedOutput,
-    userOutput,
-  } = ctx;
+   const {
+      problemStatement,
+      examples,
+      verdict,
+      timeLimitMs,
+      memoryLimitMB,
+      failingTestInput,
+      expectedOutput,
+      userOutput,
+   } = ctx;
 
-  return `
+   return `
 Eres un asistente especializado en dar pistas para problemas de programación competitiva.
 Tu objetivo es guiar al usuario SIN revelar la solución completa ni escribir código.
 
