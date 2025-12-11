@@ -4,19 +4,16 @@ import type { CoachContext } from "./types";
 /**
  * buildCoachPrompt
  * ----------------
- * Construye un prompt de "coach" para explicar:
- * 1) Qué falló
- * 2) Por qué falló
- * 3) Qué debería considerar el usuario
+ * Construye un prompt para que el modelo actúe como un “coach” de programación competitiva.
  *
- * Basado en investigación sobre explicaciones de programación competitiva,
- * el coach debe estructurar la explicación en 3 niveles:
+ * El coach debe explicar el motivo del fallo de forma estructurada, concisa y guiada,
+ * siguiendo tres niveles:
  *
- *  - Nivel 1: Idea general del problema
- *  - Nivel 2: Análisis del error y diferencias entre lo requerido vs lo que hace el código
- *  - Nivel 3: Validación contra constraints y casos borde
+ *  1. Idea principal del problema.
+ *  2. Análisis del error (qué pretendía el usuario vs. qué exige el problema).
+ *  3. Revisión frente a límites computacionales y casos borde.
  *
- * Nunca devuelve código. Solo orientación conceptual y técnica.
+ * Este prompt **no debe pedir código**, solo análisis conceptual.
  */
 export function buildCoachPrompt(ctx: CoachContext): string {
   const {
@@ -33,41 +30,46 @@ export function buildCoachPrompt(ctx: CoachContext): string {
   } = ctx;
 
   return `
-You are an ICPC-level programming coach.
+Eres un entrenador de programación competitiva con experiencia en ICPC.
 
-## Problem Summary
+Tu tarea es analizar el fallo del envío del usuario y explicar **de forma breve, precisa y estructurada**
+la causa del error y cómo debe razonar para corregirlo.
+
+## Resumen del problema
 ${problemStatement}
 
-## Examples (I/O)
+## Ejemplos relevantes (I/O)
 ${examples}
 
-## Submission Information
-Verdict: ${verdict}
-Time limit: ${timeLimitMs} ms
-Memory limit: ${memoryLimitMB} MB
+## Información del envío
+Veredicto: ${verdict}
+Límite de tiempo: ${timeLimitMs} ms
+Límite de memoria: ${memoryLimitMB} MB
 
 ${stderr ? `stderr:\n${stderr}\n` : ""}
-${failingTestInput ? `Failing input:\n${failingTestInput}\n` : ""}
-${expectedOutput ? `Expected output:\n${expectedOutput}\n` : ""}
-${userOutput ? `User output:\n${userOutput}\n` : ""}
-${userCode ? `User's code snippet:\n${userCode}\n` : ""}
+${failingTestInput ? `Entrada que falló:\n${failingTestInput}\n` : ""}
+${expectedOutput ? `Salida esperada:\n${expectedOutput}\n` : ""}
+${userOutput ? `Salida del usuario:\n${userOutput}\n` : ""}
+${userCode ? `Código del usuario:\n${userCode}\n` : ""}
 
-## Coaching Instructions (Follow STRICTLY)
-Provide a concise, structured explanation using the following 3-level format:
+## Instrucciones para tu explicación
+Debes estructurar tu respuesta en **tres niveles**, sin incluir código ni pseudocódigo:
 
-### 1. Core Idea of the Problem
-Explain in 2–3 sentences what the problem fundamentally requires.
+### 1. Idea general del problema
+Explica en 2–3 oraciones cuál es el objetivo central del ejercicio y qué tipo de razonamiento requiere.
 
-### 2. Error Analysis (Most Important)
-- Compare what the problem intends vs what the user's code actually does.  
-- Identify the exact cause of the WA/RE/TLE or other verdict.  
-- Highlight common pitfalls (off-by-one, overflow, incorrect loops, logic gaps).  
-- DO NOT provide code.
+### 2. Análisis del error
+- Compara lo que el problema necesita con lo que hace el código del usuario.  
+- Indica la causa principal del fallo según el veredicto (WA, RE, TLE, CE, etc.).  
+- Señala errores comunes relacionados (casos borde, índices, lógica, overflow, etc.).  
+- NO proporciones la solución completa.
 
-### 3. Verification Against Constraints
-- Explain how the mistake relates to time/memory limits or corner cases.
-- Suggest the type of approach that would satisfy the constraints (e.g., O(N), sorting, DP), without revealing the full algorithm.
+### 3. Verificación técnica
+- Evalúa la solución frente a los límites de tiempo/memoria.  
+- Explica si la complejidad usada es adecuada o no, y menciona riesgos de TLE o RE.  
+- Sugiere el tipo de enfoque correcto (sin darlo explícitamente).
 
-Keep the explanation **brief, precise, and non-verbose**.
+Genera tu análisis ahora siguiendo esta estructura.
 `;
 }
+
