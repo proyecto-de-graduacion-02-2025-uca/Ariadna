@@ -30,13 +30,15 @@ export async function runCoachExplain(
 }
 
 function tryParseJsonBlock(raw: string): { text: string } | null {
-    try {
-        const match = raw.match(/\{[\s\S]*?\}/m);
-        if (!match) return null;
-        const parsed = JSON.parse(match[0]);
-        if (typeof parsed.text === "string") return parsed;
-        return null;
-    } catch {
-        return null;
-    }
+  try {
+    const match = raw.match(/```json\s*([\s\S]*?)```/i);
+    if (!match?.[1]) return null;
+
+    const parsed = JSON.parse(match[1]);
+    if (typeof parsed?.text === 'string') return { text: parsed.text };
+    return null;
+  } catch {
+    return null;
+  }
 }
+
