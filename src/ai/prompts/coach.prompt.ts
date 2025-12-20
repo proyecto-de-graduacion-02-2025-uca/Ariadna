@@ -1,9 +1,5 @@
 import type { CoachContext } from "./types";
 
-/**
- * Construye un prompt para que el modelo actúe como un “coach” de programación competitiva.
- * El contenido es exactamente el tuyo, solo ajustado para que el formatter lo procese bien.
- */
 export function buildCoachPrompt(ctx: CoachContext): string {
   const {
     problemStatement,
@@ -18,45 +14,77 @@ export function buildCoachPrompt(ctx: CoachContext): string {
     userCode,
   } = ctx;
 
-  return `
-Eres un entrenador de programación competitiva con experiencia en ICPC.
+  const v = (verdict ?? '').trim().toUpperCase();
+  const isAC = v === 'AC';
 
-Tu tarea es analizar el fallo del envío del usuario y explicar de forma breve, precisa y estructurada
-la causa del error y cómo debe razonar para corregirlo.
+  if (isAC) {
+      return `Eres un entrenador de programación competitiva con experiencia en ICPC.
 
-Resumen del problema:
-${problemStatement}
+          El envío del usuario fue **ACEPTADO (AC)**.
+          Tu tarea es dar una revisión breve y estructurada:
 
-Ejemplos relevantes (I/O):
-${examples}
+          1. Confirmación:
+            Di claramente que la solución es correcta.
 
-Información del envío:
-Veredicto: ${verdict}
-Límite de tiempo: ${timeLimitMs} ms
-Límite de memoria: ${memoryLimitMB} MB
+          2. Calidad:
+            Menciona 1–3 mejoras opcionales (claridad, robustez, estilo, micro-optimizaciones).
+            NO inventes errores. NO digas que el código “falló”.
 
-${stderr ? `stderr:\n${stderr}\n` : ""}
-${failingTestInput ? `Entrada que falló:\n${failingTestInput}\n` : ""}
-${expectedOutput ? `Salida esperada:\n${expectedOutput}\n` : ""}
-${userOutput ? `Salida del usuario:\n${userOutput}\n` : ""}
-${userCode ? `Código del usuario:\n${userCode}\n` : ""}
+          3. Complejidad:
+            Confirma si la complejidad es adecuada para los límites.
 
-Instrucciones para tu explicación:
+          Resumen del problema:
+          ${problemStatement}
 
-1. Idea general del problema:
-   Explica en 2–3 oraciones cuál es el objetivo central del ejercicio y qué tipo de razonamiento requiere.
+          Ejemplos relevantes (I/O):
+          ${examples}
 
-2. Análisis del error:
-   - Compara lo que el problema necesita con lo que hace el código del usuario.
-   - Indica la causa principal del fallo según el veredicto (WA, RE, TLE, CE, etc.).
-   - Señala errores comunes relacionados (casos borde, índices, lógica, overflow, etc.).
-   - No proporciones la solución completa.
+          Código del usuario:
+          ${userCode ? `\n${userCode}\n` : "(no provisto)"}
 
-3. Verificación técnica:
-   - Evalúa la solución frente a los límites de tiempo/memoria.
-   - Explica si la complejidad usada es adecuada o no, y menciona riesgos de TLE o RE.
-   - Sugiere el tipo de enfoque correcto (sin darlo explícitamente).
+          Genera tu análisis ahora.
+            `.trim();
+  } else {
+        return `
+          Eres un entrenador de programación competitiva con experiencia en ICPC.
 
-Genera tu análisis ahora siguiendo esta estructura.
-  `.trim();
+          Tu tarea es analizar el fallo del envío del usuario y explicar de forma breve, precisa y estructurada
+          la causa del error y cómo debe razonar para corregirlo.
+
+          Resumen del problema:
+          ${problemStatement}
+
+          Ejemplos relevantes (I/O):
+          ${examples}
+
+          Información del envío:
+          Veredicto: ${verdict}
+          Límite de tiempo: ${timeLimitMs} ms
+          Límite de memoria: ${memoryLimitMB} MB
+
+          ${stderr ? `stderr:\n${stderr}\n` : ""}
+          ${failingTestInput ? `Entrada que falló:\n${failingTestInput}\n` : ""}
+          ${expectedOutput ? `Salida esperada:\n${expectedOutput}\n` : ""}
+          ${userOutput ? `Salida del usuario:\n${userOutput}\n` : ""}
+          ${userCode ? `Código del usuario:\n${userCode}\n` : ""}
+
+          Instrucciones para tu explicación:
+
+          1. Idea general del problema:
+            Explica en 2–3 oraciones cuál es el objetivo central del ejercicio y qué tipo de razonamiento requiere.
+
+          2. Análisis del error:
+            - Compara lo que el problema necesita con lo que hace el código del usuario.
+            - Indica la causa principal del fallo según el veredicto (WA, RE, TLE, CE, etc.).
+            - Señala errores comunes relacionados (casos borde, índices, lógica, overflow, etc.).
+            - No proporciones la solución completa.
+
+          3. Verificación técnica:
+            - Evalúa la solución frente a los límites de tiempo/memoria.
+            - Explica si la complejidad usada es adecuada o no, y menciona riesgos de TLE o RE.
+            - Sugiere el tipo de enfoque correcto (sin darlo explícitamente).
+
+          Genera tu análisis ahora siguiendo esta estructura.
+            `.trim();
+  } 
 }

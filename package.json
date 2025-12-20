@@ -19,7 +19,10 @@
   "scripts": {
     "build": "tsc -p .",
     "prepublishOnly": "npm run build",
-    "dev:e2e-full": "npm run build && node dist/dev/e2e-full.js"
+    "dev:e2e-full": "npm run build && node dist/dev/e2e-full.js",
+    "dev:e2e-hints": "npm run build && node dist/dev/e2e-hints.js",
+    "dev:e2e-coach": "npm run build && node dist/dev/e2e-coach.js",
+    "dev:e2e-refine": "npm run build && node dist/dev/e2e-refine.js"
   },
   "exports": {
     ".": {
