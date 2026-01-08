@@ -1,11 +1,8 @@
 import type { CallModelOptions, AiResponse } from './types';
+import { getConfig } from '../internal/configStore';
 
 const DEFAULT_TIMEOUT_MS = 60_000;
 const DEFAULT_BASE_URL = 'https://api.openai.com/v1/chat/completions';
-
-const API_KEY_ENV = 'ARIADNA_AI_API_KEY';
-const MODEL_ENV = 'ARIADNA_AI_MODEL';
-const BASE_URL_ENV = 'ARIADNA_AI_BASE_URL';
 
 function isDev() {
     return process.env.NODE_ENV !== 'production';
@@ -28,22 +25,30 @@ function safeParseJson(text: string): unknown {
 /**
  * Wrapper principal para llamar a un modelo LLM estilo OpenAI.
  *
- * - Lee API key de process.env.ARIADNA_AI_API_KEY (o options.apiKey).
- * - Lee modelo de process.env.ARIADNA_AI_MODEL (o options.model).
- * - Soporta baseUrl OpenAI-compatible (env ARIADNA_AI_BASE_URL u options.baseUrl).
- * - Maneja timeout, errores de red / API y respuestas vacías.
+ * - Lee configuración desde getConfig()
+ * - Soporta override por options (uso avanzado / tests)
+ * - Maneja timeout, errores de red / API y respuestas vacías
  */
 export async function callModel(
     prompt: string,
     options: CallModelOptions = {}
 ): Promise<AiResponse> {
-    const apiKey = options.apiKey ?? process.env[API_KEY_ENV];
-    const model = options.model ?? process.env[MODEL_ENV];
-    const baseUrl = options.baseUrl ?? process.env[BASE_URL_ENV] ?? DEFAULT_BASE_URL;
-    const timeoutMs = options.timeoutMs ?? DEFAULT_TIMEOUT_MS;
+    const config = getConfig();
+
+    const apiKey = options.apiKey ?? config.llm.apiKey;
+    const model = options.model ?? config.llm.model;
+    const baseUrl =
+        options.baseUrl ??
+        DEFAULT_BASE_URL;
+
+    const timeoutMs =
+        options.timeoutMs ??
+        config.timeoutMs ??
+        DEFAULT_TIMEOUT_MS;
 
     if (!apiKey) {
-        const message = `Missing AI API key. Set ${API_KEY_ENV} or provide options.apiKey.`;
+        const message =
+            'Missing AI API key. Configure Ariadna with configureAriadna().';
         devLog(message);
 
         return {
@@ -56,7 +61,8 @@ export async function callModel(
     }
 
     if (!model) {
-        const message = `Missing AI model name. Set ${MODEL_ENV} or provide options.model.`;
+        const message =
+            'Missing AI model name. Configure Ariadna with configureAriadna().';
         devLog(message);
 
         return {
@@ -113,7 +119,8 @@ export async function callModel(
 
             const errorCode = (parsed as any)?.error?.code;
             if (res.status === 429 && errorCode === 'insufficient_quota') {
-                message = 'AI provider error: insufficient quota / billing. Check your plan or API key.';
+                message =
+                    'AI provider error: insufficient quota / billing. Check your plan or API key.';
             }
 
             devLog(message, parsed ?? text);
