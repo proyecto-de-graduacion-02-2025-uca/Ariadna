@@ -20,6 +20,7 @@ export type { HintSuggestion, HintLevel } from './ai/types';
 
 // export Refine
 export { refineFromEntry, checkEntryAndRefine } from './pipeline/refine-entry';
+export { runRefineK } from './ai/refine/refine-runner';
 export type {
   RefineSolveResult,
   RefineCandidateResult,
@@ -27,6 +28,11 @@ export type {
   RefineImprovementSummary,
   RefineStoppedReason,
 } from './ai/refine/types';
+
+
+// export Config (LLM)
+export { configureAriadna } from './internal/configStore';
+export type { AriadnaConfig } from './internal/configStore';
 
 
 

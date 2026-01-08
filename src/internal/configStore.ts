@@ -13,11 +13,13 @@ export function setConfig(config: AriadnaConfig) {
   currentConfig = Object.freeze({ ...config });
 }
 
+export function configureAriadna(config: AriadnaConfig) {
+  setConfig(config);
+}
+
 export function getConfig(): AriadnaConfig {
   if (!currentConfig) {
-    throw new Error(
-      'Ariadna is not configured. Call configureAriadna() first.'
-    );
+    throw new Error('Ariadna is not configured. Call configureAriadna() first.');
   }
   return currentConfig;
 }
