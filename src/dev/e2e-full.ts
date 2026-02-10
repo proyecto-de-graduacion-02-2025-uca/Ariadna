@@ -1,5 +1,3 @@
-// src/dev/e2e-full.ts
-
 import { checkEntryCompileAndJudge } from '../pipeline/compile-and-judge';
 
 async function main() {

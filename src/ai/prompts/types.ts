@@ -1,5 +1,3 @@
-// src/ai/prompts/types.ts
-
 /**
  * Tipos exclusivos para los prompts del módulo de IA (coach, hints, refine).
  *

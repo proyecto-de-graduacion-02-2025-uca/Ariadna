@@ -1,5 +1,3 @@
-// src/dev/e2e-coach.ts
-
 import { coachFromEntry } from '../pipeline/coach';
 
 function assert(cond: any, msg: string) {

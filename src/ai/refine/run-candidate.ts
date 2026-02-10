@@ -1,5 +1,3 @@
-// src/ai/refine/run-candidate.ts
-
 import { compileCpp } from '../../sandbox/compiler';
 import { sanitizeFlags } from '../../sandbox/policy.flags';
 import { runJudge } from '../../judge/runner';

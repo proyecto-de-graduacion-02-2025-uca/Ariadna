@@ -1,5 +1,3 @@
-// src/ai/refine/types.ts
-
 import type { AiError, CallModelOptions } from '../types';
 import type { SubmissionVerdict } from '../../judge/types';
 
@@ -63,8 +61,6 @@ export interface RefineCandidateResult {
   source: string;
   judge?: RefineCandidateJudgeSummary;
   aiError?: AiError;
-
-  // ⚠️ antes era AiSuccessValue (incluía raw). Ahora es “lite”.
   aiRaw?: RefineAiRawLite;
 }
 
@@ -97,8 +93,6 @@ export interface RefineSolveParams {
 
 export type RefineStoppedReason = 'accepted' | 'maxCandidatesReached' | 'aiError' | 'noCandidates';
 
-// src/ai/refine/types.ts
-
 export interface RefineImprovementSummary {
   baselineVerdict?: SubmissionVerdict;
   winnerVerdict?: SubmissionVerdict;
@@ -119,7 +113,6 @@ export interface RefineImprovementSummary {
 
   summary: string;
 }
-
 
 export interface RefineSolveResult {
   winner?: RefineCandidateResult;

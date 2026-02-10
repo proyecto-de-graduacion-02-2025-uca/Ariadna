@@ -1,4 +1,3 @@
-// src/ai/prompts/refine.prompt.ts
 import type { RefineContext } from "./types";
 
 /**

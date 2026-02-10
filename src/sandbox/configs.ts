@@ -1,4 +1,3 @@
-// src/sandbox/configs.ts
 import * as os from 'os';
 import * as path from 'path';
 

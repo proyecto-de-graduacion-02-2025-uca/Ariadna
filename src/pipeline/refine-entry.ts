@@ -1,5 +1,3 @@
-// src/pipeline/refine-entry.ts
-
 import { validateEntry } from '../entry/index';
 import type { EntryErr } from '../types/public';
 import type { ProblemSpec } from '../spec/problem.schema';

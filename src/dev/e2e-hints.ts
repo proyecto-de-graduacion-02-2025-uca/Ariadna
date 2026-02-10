@@ -1,5 +1,3 @@
-// src/dev/e2e-hints.ts
-
 import { hintsFromEntry } from '../pipeline/hints-from-entry';
 
 async function main() {

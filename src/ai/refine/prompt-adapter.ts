@@ -1,5 +1,3 @@
-// src/ai/refine/prompt-adapter.ts
-
 import { buildRefinePrompt as buildRefineStringPrompt } from '../prompts/refine.prompt';
 import type { RefineContext } from '../prompts/types';
 import type { RefinePrompt, RefinePromptContext } from './types';

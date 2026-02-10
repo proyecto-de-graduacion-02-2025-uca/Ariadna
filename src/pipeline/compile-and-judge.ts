@@ -1,5 +1,3 @@
-// src/pipeline/compile-and-judge.ts
-
 import { validateEntry } from '../entry/index';
 import { compileCpp } from '../sandbox/compiler';
 import { sanitizeFlags } from '../sandbox/policy.flags';
